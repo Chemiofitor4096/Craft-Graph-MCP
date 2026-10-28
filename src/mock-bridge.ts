@@ -20,7 +20,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
-const FIXTURE_PATH = path.resolve(HERE, "..", "..", "shared", "fixtures", "tiny-pack.json");
+const FIXTURE_PATH = path.resolve(HERE, "..", "fixtures", "tiny-pack.json");
 const DEFAULT_PORT = Number(process.env.MOCK_PORT ?? 25585);
 
 interface FixtureRecipe {
@@ -399,7 +399,7 @@ export function loadBridgeDump(dir: string): Record<string, unknown> {
 
 /** Java 侧导出的契约样本目录。 */
 export function defaultDumpDir(): string {
-  return path.resolve(HERE, "..", "..", "shared", "fixtures", "bridge-dump");
+  return path.resolve(HERE, "..", "fixtures", "bridge-dump");
 }
 
 /**

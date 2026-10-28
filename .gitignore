@@ -1,0 +1,11 @@
+node_modules/
+dist/
+*.tsbuildinfo
+
+# Java 侧导出的契约样本：由 bridge 仓库的 ContractDumpTest 生成，不入库（避免陈旧样本造成假通过）
+fixtures/bridge-dump/
+
+# 本地缓存与日志
+.cache/
+*.log
+.env
