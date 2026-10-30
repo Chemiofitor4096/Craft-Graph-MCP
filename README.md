@@ -61,8 +61,12 @@ npm run live        # 对运行中的游戏体检
 npm run measure     # 改了输出/渲染就跑，看 token 涨没涨
 ```
 
-`fixtures/bridge-dump/` 由 bridge 仓库的 `ContractDumpTest` 生成（`./gradlew test`），
-本仓库不提交它 —— 陈旧样本会让契约测试假通过。
+`fixtures/bridge-dump/` 不入库（陈旧样本会让契约测试假通过）。它有两个来源：
+
+- CI：从 bridge 的同版本 Release 下载 `protocol-<ver>.zip`（见 `.github/workflows/ci.yml`）；
+- 本地：跑一次 bridge 的 `./gradlew test`，把 `protocol/fixtures/*` 复制到 `fixtures/`。
+
+两边的版本号约定对齐（MCP 的 `package.json` version ↔ bridge 的 tag）。
 
 ## 许可
 
