@@ -18,3 +18,27 @@ jobs:
       - run: npm run typecheck
       - run: npm run smoke
       - run: npm run e2e
+
+  # 跨语言契约：吃 bridge 发布时附带的 protocol-<ver>.zip。
+  # 约定：MCP 的 package version 与 bridge 的 tag 对齐（两边发版时一起改）。
+  contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+      - run: npm ci
+
+      - name: 取协议样本
+        run: |
+          set -euo pipefail
+          VERSION=$(node -p "require('./package.json').version")
+          curl -fsSL -o /tmp/protocol.zip \
+            "https://github.com/Chemiofitor4096/Craft-Graph/releases/download/v${VERSION}/protocol-${VERSION}.zip"
+          unzip -q /tmp/protocol.zip -d /tmp/protocol
+          mkdir -p fixtures
+          cp -r /tmp/protocol/protocol/fixtures/* fixtures/
+
+      - run: npm run contract
