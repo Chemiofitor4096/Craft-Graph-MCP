@@ -488,7 +488,9 @@ export function renderPlan(store: RecipeStore, plan: ProductionPlan, targetLabel
     lines.push("| 环节 | 机器 | 耗时 | 台数 |");
     lines.push("|---|---|---|---|");
     for (const s of machineSteps) {
-      const machine = s.machineId ? name(store, s.machineId) : "读不到机器名";
+      const machine = s.machineId
+        ? `${store.machineName(s.machineId)}（\`${s.machineId}\`）`
+        : "读不到机器名";
       const seconds = s.secondsPerCraft == null ? "未知" : `${round(s.secondsPerCraft)} 秒`;
       const count = s.machines == null ? "**未知**" : `${s.machines}`;
       lines.push(`| ${name(store, s.item)} | ${machine} | ${seconds} | ${count} |`);

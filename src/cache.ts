@@ -313,6 +313,27 @@ export class RecipeStore {
   }
 
   /**
+   * 机器显示名。
+   *
+   * 原版和多数模组的机器就是物品 id，`itemNames` 里有显示名。但 Custom Machinery
+   * 的机器不是方块，`machine` 是它自己的 id（例如 `custommachinery:srd`），查不到
+   * 物品名 —— 这时退化成「把 path 变可读」：去命名空间、下划线变空格、词首大写。
+   *
+   * <p>只用于展示；分组/统计仍然用原始 id（见 plan.ts 的 machineTotals）。
+   */
+  machineName(id: string): string {
+    const display = this.itemName(id);
+    if (display !== id) return display;
+
+    const path = id.includes(":") ? id.slice(id.indexOf(":") + 1) : id;
+    return path
+      .split("_")
+      .filter((part) => part.length > 0)
+      .map((part) => part[0]!.toUpperCase() + part.slice(1))
+      .join(" ");
+  }
+
+  /**
    * 按名称或 id 搜索物品。
    *
    * 本地完成，不需要游戏在运行 —— 物品表在缓存建立时就一起存下来了。

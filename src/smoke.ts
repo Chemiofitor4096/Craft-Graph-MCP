@@ -624,6 +624,18 @@ try {
   check("粉碎轮数量正确（10/分、100刻/次 → 1 台）", crusher?.count === 1, `crusher=${crusher?.count}`);
 
   check(
+    "CM 的机器 id 会退化成可读名（不是裸 id）",
+    store.machineName("custommachinery:srd") === "Srd" &&
+      store.machineName("custommachinery:assembling_machine") === "Assembling Machine",
+    `${store.machineName("custommachinery:srd")} / ${store.machineName("custommachinery:assembling_machine")}`,
+  );
+  check(
+    "没有显示名的 id 也会可读化（不吐裸 id）",
+    store.machineName("minecraft:iron_ingot") === "Iron Ingot",
+    store.machineName("minecraft:iron_ingot"),
+  );
+
+  check(
     "基础原料速率正确",
     plan.rawMaterials.length === 1 && plan.rawMaterials[0]!.ratePerMinute === 10,
     JSON.stringify(plan.rawMaterials),

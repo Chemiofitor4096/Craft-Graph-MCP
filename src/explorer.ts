@@ -64,6 +64,11 @@ function label(store: RecipeStore, id: string): string {
   return n === id ? esc(id) : `${esc(n)} <code>${esc(id)}</code>`;
 }
 
+/** 机器标签：CM 的机器没有物品名，用 machineName 的可读化退路。 */
+function machineLabel(store: RecipeStore, id: string): string {
+  return `${esc(store.machineName(id))} <code>${esc(id)}</code>`;
+}
+
 /** 文件名安全段：物品 id 里的冒号、斜杠都替换掉。 */
 export function safeFilePart(s: string): string {
   return s.replace(/[^A-Za-z0-9._-]+/g, "__");
@@ -381,7 +386,7 @@ export function renderPlanHtml(store: RecipeStore, plan: ProductionPlan, targetL
       ["环节", "机器", "耗时", "台数"],
       machineSteps.map((s) => [
         label(store, s.item),
-        s.machineId ? label(store, s.machineId) : `<span class="muted">读不到机器名</span>`,
+        s.machineId ? machineLabel(store, s.machineId) : `<span class="muted">读不到机器名</span>`,
         s.secondsPerCraft == null ? `<span class="muted">未知</span>` : `${fmt(s.secondsPerCraft)} 秒`,
         s.machines == null ? `<span class="unknown">未知</span>` : `<span class="num">${s.machines}</span>`,
       ]),
@@ -473,7 +478,7 @@ function planNodeHtml(store: RecipeStore, node: PlanNode, depth: number, ids: { 
     if (ms === "manual") {
       bits.push(`<span class="mach">工作台（按次合成）</span>`);
     } else if (ms === "computed") {
-      bits.push(`<span class="mach">${esc(node.machineId ? store.itemName(node.machineId) : "机器")} ×${node.machines}</span>`);
+      bits.push(`<span class="mach">${node.machineId ? machineLabel(store, node.machineId) : "机器"} ×${node.machines}</span>`);
     } else {
       bits.push(`<span class="mach warn">台数未知</span>`);
     }
